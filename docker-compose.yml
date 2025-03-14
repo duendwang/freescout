@@ -26,6 +26,11 @@ services:
       - ENABLE_SSL_PROXY=${ENABLE_SSL_PROXY:-FALSE}
       - DISPLAY_ERRORS=${DISPLAY_ERRORS:-FALSE}
       - TIMEZONE=${TIMEZONE:-UTC}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.freescout.entrypoints=websecure"
+      - "traefik.http.routers.freescout.rule=Host(`$DOMAIN`)"
+      - "traefik.http.routers.freescout.tls.certresolver=http-challenge"
     networks:
       - traefik-proxy
       - default
