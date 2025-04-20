@@ -1,7 +1,13 @@
 services:
   freescout-app:
     image: tiredofit/freescout
-    container_name: freescout-app
+#    container_name: freescout-app
+    user: ${PUID:-1000}:${PGID:-1000}
+    security_opt:
+      - "no-new-privileges:true"
+    cap-drop:
+      - SETUID
+      - SETGID
     volumes:
     ### If you want to perform customizations to the source and have access to it, then uncomment this line - This includes modules
     - ./source:/www/html
@@ -37,7 +43,13 @@ services:
     restart: always
   freescout-db:
     image: tiredofit/mariadb
-    container_name: freescout-db
+#    container_name: freescout-db
+    user: ${PUID:-1000}:${PGID:-1000}
+    security_opt:
+      - "no-new-privileges:true"
+    cap-drop:
+      - SETUID
+      - SETGID
     volumes:
       - ./data/mysql:/var/lib/mysql
     environment:
@@ -51,8 +63,14 @@ services:
       - default
     restart: always
   freescout-db-backup:
-    container_name: freescout-db-backup
+#    container_name: freescout-db-backup
     image: tiredofit/db-backup
+    user: ${PUID:-1000}:${PGID:-1000}
+    security_opt:
+      - "no-new-privileges:true"
+    cap-drop:
+      - SETUID
+      - SETGID
     volumes:
       - ./data/dbbackup:/backup
     environment:
