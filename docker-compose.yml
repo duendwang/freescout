@@ -1,16 +1,11 @@
 services:
   freescout-app:
     image: tiredofit/freescout
-#    container_name: freescout-app
-    user: ${PUID:-1000}:${PGID:-1000}
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - SETUID
-      - SETGID
     volumes:
     ### If you want to perform customizations to the source and have access to it, then uncomment this line - This includes modules
-    - ./source:/www/html
+    - ./data/source:/www/html
     ### Or, if you just want to use Stock Freescout and hold onto persistent files like cache and session use this, one or the other.
     - ./data/freescout:/data
     ### If you want to just keep the original source and add additional modules uncomment this line
@@ -43,13 +38,8 @@ services:
     restart: always
   freescout-db:
     image: tiredofit/mariadb
-#    container_name: freescout-db
-    user: ${PUID:-1000}:${PGID:-1000}
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - SETUID
-      - SETGID
     volumes:
       - ./data/mysql:/var/lib/mysql
     environment:
@@ -65,12 +55,8 @@ services:
   freescout-db-backup:
 #    container_name: freescout-db-backup
     image: tiredofit/db-backup
-    user: ${PUID:-1000}:${PGID:-1000}
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - SETUID
-      - SETGID
     volumes:
       - ./data/dbbackup:/backup
     environment:
@@ -92,4 +78,3 @@ networks:
   default:
   traefik-proxy:
     external: true
-    name: traefik-proxy
